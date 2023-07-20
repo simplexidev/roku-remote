@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RRemote (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "RRemote (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

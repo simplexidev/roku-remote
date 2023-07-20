@@ -9,7 +9,7 @@ using Windows.Networking.Connectivity;
 using Windows.Storage;
 using Windows.System.Threading;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Toolkit.Uwp.Helpers;
 using RRemote.Common;
@@ -472,7 +472,9 @@ namespace RRemote.ViewModels
                     CloseButtonText = "Cancel"
                 };
 
-                var result = await dialog.ShowAsync();
+                /* TODO You should replace 'this' with the instance of UserControl that this ContentDialog is meant to be a part of. */
+
+                var result = await SetContentDialogRoot(dialog.ShowAsync,this);
 
                 if (result == ContentDialogResult.Primary)
                     lock (DeviceLocker)
@@ -485,6 +487,15 @@ namespace RRemote.ViewModels
                         }
                     }
             }
+        }
+
+         private static ContentDialog SetContentDialogRoot(ContentDialog contentDialog, UserControl control)
+         {
+            if (Windows.Foundation.Metadata.ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 8))
+            {
+                contentDialog.XamlRoot = control.Content.XamlRoot;
+            }
+            return contentDialog;
         }
 
         private bool DeleteDeviceCommandCanExecute()
